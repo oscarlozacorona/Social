@@ -15,11 +15,13 @@ interface IProps {
     closeForm: () => void;
     createOrEdit: (activity: IActivity) => void;
     deleteActivity: (id: string) => void;
+    submitting: boolean;
 }
 
 const ActivityDashboard: FC<IProps> = ({ 
         activities, selectActivity, selectedActivity, cancelSelect,
-        editMode, openForm, closeForm, createOrEdit, deleteActivity
+        editMode, openForm, closeForm, createOrEdit, deleteActivity,
+        submitting,
     }) => {
     return (
         <Grid>
@@ -28,6 +30,7 @@ const ActivityDashboard: FC<IProps> = ({
                     activities={activities}
                     selectActivity={selectActivity}
                     deleteActivity={deleteActivity}
+                    submitting={submitting}
                 />
             </GridColumn>
             <GridColumn width={6}>
@@ -43,6 +46,7 @@ const ActivityDashboard: FC<IProps> = ({
                         createOrEdit={createOrEdit}
                         closeForm={closeForm}
                         activity={selectedActivity}
+                        submitting={submitting}
                     />
                 )}
             </GridColumn>
