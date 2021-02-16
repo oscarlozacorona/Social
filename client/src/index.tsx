@@ -1,12 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './app/layout/styles.css';
-import 'semantic-ui-css/semantic.min.css'
-import App from './app/layout/App';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./app/layout/styles.css";
+import "semantic-ui-css/semantic.min.css";
+import App from "./app/layout/App";
+import { StoreContext, store } from "./app/stores/store";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <StoreContext.Provider value={store}>
+        <App />
+    </StoreContext.Provider>,
+    document.getElementById("root")
 );

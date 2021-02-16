@@ -1,15 +1,12 @@
 import React, { FC, useState, SyntheticEvent } from "react";
 import { Item, Button, Label, Segment } from "semantic-ui-react";
 import { IActivity } from "../../../app/models/activity";
+import { useStore } from "../../../app/stores/store";
+import { observer } from "mobx-react-lite";
 
-interface IProps {
-    activities: IActivity[];
-    selectActivity: (id: string) => void;
-    deleteActivity: (id: string) => void;
-    submitting: boolean;
-}
-
-export const ActivityList: FC<IProps> = ({ activities, selectActivity, deleteActivity, submitting }) => {
+const ActivityList: FC = () => {
+    const { activityStore } = useStore();
+    const { deleteActivity, activitiesByDate, loading, selectActivity } = activityStore;
     const [target, setTarget] = useState('');
 
     const handleActivityDelete = (e: SyntheticEvent<HTMLButtonElement>, id: string) => {
@@ -20,7 +17,7 @@ export const ActivityList: FC<IProps> = ({ activities, selectActivity, deleteAct
     return (
         <Segment clearing>
             <Item.Group divided>
-                {activities.map(activity => (
+                {activitiesByDate.map(activity => (
                     <Item key={activity.id}>
                         <Item.Content>
                             <Item.Header as='a'>{activity.title}</Item.Header>
@@ -41,7 +38,7 @@ export const ActivityList: FC<IProps> = ({ activities, selectActivity, deleteAct
                                     content='Delete'
                                     color='red'
                                     onClick={(e) => handleActivityDelete(e, activity.id)}
-                                    loading={submitting && target === activity.id}
+                                    loading={loading && target === activity.id}
                                     name={activity.id}
                                 />
                                 <Label basic content={activity.category} />
@@ -53,3 +50,5 @@ export const ActivityList: FC<IProps> = ({ activities, selectActivity, deleteAct
         </Segment>
     );
 };
+
+export default observer(ActivityList);

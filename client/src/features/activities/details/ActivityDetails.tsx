@@ -1,32 +1,30 @@
 import React, { FC } from "react";
 import { Card, Image, Button } from "semantic-ui-react";
-import { IActivity } from "../../../app/models/activity";
+import { LoadingComponent } from "../../../app/layout/LoadingComponent";
+import { useStore } from "../../../app/stores/store";
 
-interface IProps {
-    activity: IActivity;
-    cancelSelect: () => void;
-    openForm: (id: string) => void;
-}
+export const ActivityDetails: FC = () => {
+    const { activityStore } = useStore();
+    const { selectedActivity: activity, openForm, cancelSelectedActivity } = activityStore;
 
-export const ActivityDetails: FC<IProps> = ({ 
-    activity, cancelSelect, openForm
-}) => {
+    if (!activity) return <LoadingComponent inverted content=''/>
+
     return (
         <Card fluid>
-            <Image src={`/assets/categoryImages/${activity.category}.jpg`} wrapped ui={false} />
+            <Image src={`/assets/categoryImages/${activity!.category}.jpg`} wrapped ui={false} />
             <Card.Content>
-                <Card.Header>{activity.title}</Card.Header>
+                <Card.Header>{activity!.title}</Card.Header>
                 <Card.Meta>
-                    <span>{activity.date}</span>
+                    <span>{activity!.date}</span>
                 </Card.Meta>
                 <Card.Description>
-                    {activity.description}
+                    {activity!.description}
                 </Card.Description>
             </Card.Content>
             <Card.Content extra>
                 <Button.Group widths={2}>
-                    <Button basic color='blue' content='Edit' onClick={openForm.bind(null, activity.id)}/>
-                    <Button basic color='grey' content='Cancel' onClick={cancelSelect}/>
+                    <Button basic color='blue' content='Edit' onClick={openForm.bind(null, activity!.id)}/>
+                    <Button basic color='grey' content='Cancel' onClick={cancelSelectedActivity}/>
                 </Button.Group>
             </Card.Content>
         </Card>
