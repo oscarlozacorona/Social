@@ -1,12 +1,12 @@
 import React, { FC, useState, SyntheticEvent } from "react";
 import { Item, Button, Label, Segment } from "semantic-ui-react";
-import { IActivity } from "../../../app/models/activity";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
+import { Link } from "react-router-dom";
 
 const ActivityList: FC = () => {
     const { activityStore } = useStore();
-    const { deleteActivity, activitiesByDate, loading, selectActivity } = activityStore;
+    const { deleteActivity, activitiesByDate, loading } = activityStore;
     const [target, setTarget] = useState('');
 
     const handleActivityDelete = (e: SyntheticEvent<HTMLButtonElement>, id: string) => {
@@ -31,7 +31,7 @@ const ActivityList: FC = () => {
                                     floated='right'
                                     content='View'
                                     color='blue'
-                                    onClick={selectActivity.bind(null, activity.id)}    
+                                    as={Link} to={`/activities/${activity.id}`}   
                                 />
                                 <Button
                                     floated='right'

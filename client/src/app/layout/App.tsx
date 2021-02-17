@@ -1,30 +1,47 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
+import ActivityForm from "../../features/activities/form/ActivityForm";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
-import NavBar from "../../features/Nav/NavBar";
+import NavBar from "../../features/nav/NavBar";
+import HomePage from "../../features/home/homepage";
+import ActivityDetails from "../../features/activities/details/ActivityDetails";
 import { Container } from "semantic-ui-react";
 import { observer } from 'mobx-react-lite';
-import { LoadingComponent } from "./LoadingComponent";
-import { useStore } from "../stores/store";
+import { Route, useLocation } from "react-router-dom";
 import "./styles.css";
 
 const App: FC = () => {
-    const { activityStore } = useStore();
+    const location = useLocation();
+    const [showPath, setShowPath] = useState(false);
 
-    // Effects
     useEffect(() => {
-        activityStore.loadActivities();
-    }, [activityStore]);
-
-    if (activityStore.loadingInitial) return <LoadingComponent content='Loading App' />;
-
+        if (location.pathname !== '/') {
+            setShowPath(true)
+        } else {
+            setShowPath(false);
+        }
+    }, [location]);
     return (
-        <React.Fragment>
-            <NavBar />
-            <Container style={{ marginTop: "7em" }}>
-                <ActivityDashboard />
-            </Container>
-        </React.Fragment>
+        <>
+            <Route path='/' exact component={HomePage}/>
+            {showPath && (<Route 
+                path={'/(.*)'}
+                render={ActiviesApp.bind(null, location.key)}
+            />)}
+        </>
     );
 };
 
 export default observer(App);
+
+const ActiviesApp = (key: string | undefined) => {
+    return (
+        <>
+            <NavBar />
+            <Container style={{ marginTop: "7em" }}>
+                <Route path='/activities' exact component={ActivityDashboard}/>
+                <Route path='/activities/:id' component={ActivityDetails}/>
+                <Route key={key} path={['/create-activity', '/manage/:id']} component={ActivityForm}/>
+            </Container>
+        </>
+    )
+}
