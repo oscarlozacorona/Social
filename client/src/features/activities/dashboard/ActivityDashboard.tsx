@@ -4,6 +4,7 @@ import { Grid, GridColumn } from 'semantic-ui-react'
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 import { LoadingComponent } from '../../../app/layout/LoadingComponent';
+import ActivityFilter from './ActivityFilter';
 
 const ActivityDashboard: FC = () => {
     const { activityStore } = useStore();
@@ -24,7 +25,7 @@ const ActivityDashboard: FC = () => {
                 <ActivityList />
             </GridColumn>
             <GridColumn width={6}>
-                <h2>Activity Filter</h2>
+                <ActivityFilter />
             </GridColumn>
         </Grid>
     )

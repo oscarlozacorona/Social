@@ -1,14 +1,22 @@
 import React, { FC, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Card, Image, Button } from "semantic-ui-react";
+import { useParams } from "react-router-dom";
+import { Grid } from "semantic-ui-react";
 import { LoadingComponent } from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
-import { observer } from 'mobx-react-lite';
+import { observer } from "mobx-react-lite";
+import ActivityDetailHeader from "./ActivityDetailHeader";
+import ActivityDetailInfo from "./ActivityDetailInfo";
+import ActivityDetailChat from "./ActivityDetailChat";
+import ActivityDetailSideBar from "./ActivityDetailSideBar";
 
 const ActivityDetails: FC = () => {
     const { activityStore } = useStore();
-    const { selectedActivity: activity, loadActivity, loadingInitial } = activityStore;
-    const { id } = useParams<{id: string}>();
+    const {
+        selectedActivity: activity,
+        loadActivity,
+        loadingInitial,
+    } = activityStore;
+    const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
         if (id) {
@@ -16,27 +24,20 @@ const ActivityDetails: FC = () => {
         }
     }, [id, loadActivity]);
 
-    if (loadingInitial || !activity) return <LoadingComponent inverted content=''/>
+    if (loadingInitial || !activity)
+        return <LoadingComponent inverted content='' />;
 
     return (
-        <Card fluid>
-            <Image src={`/assets/categoryImages/${activity!.category}.jpg`} wrapped ui={false} />
-            <Card.Content>
-                <Card.Header>{activity!.title}</Card.Header>
-                <Card.Meta>
-                    <span>{activity!.date}</span>
-                </Card.Meta>
-                <Card.Description>
-                    {activity!.description}
-                </Card.Description>
-            </Card.Content>
-            <Card.Content extra>
-                <Button.Group widths={2}>
-                    <Button as={Link} to={`/manage/${activity.id}`} basic color='blue' content='Edit' />
-                    <Button as={Link} to={`/activities`} basic color='grey' content='Cancel' />
-                </Button.Group>
-            </Card.Content>
-        </Card>
+        <Grid>
+            <Grid.Column width={10}>
+                <ActivityDetailHeader activity={activity}/>
+                <ActivityDetailInfo activity={activity}/>
+                <ActivityDetailChat />
+            </Grid.Column>
+            <Grid.Column width={6}>
+                <ActivityDetailSideBar />
+            </Grid.Column>
+        </Grid>
     );
 };
 

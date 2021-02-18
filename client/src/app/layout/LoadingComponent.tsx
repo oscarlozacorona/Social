@@ -1,4 +1,4 @@
-import react from 'react';
+import React from 'react';
 import { Dimmer, Loader } from 'semantic-ui-react';
 
 interface IProps {
